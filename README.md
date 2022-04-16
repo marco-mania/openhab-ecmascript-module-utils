@@ -5,7 +5,7 @@ in openHAB.
 
 ## Installation
 
-Create folder `/conf/automation/js/node_modules/lights` and copy `index.js` to
+Create folder `/conf/automation/js/node_modules/utils` and copy `index.js` to
 this folder.
 
 ## Usage
