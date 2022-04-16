@@ -3,12 +3,17 @@
 Collection of useful functions for ECMAScript 262 Edition 11 defined rules
 in openHAB.
 
-Usage:
+## Installation
+
+Create folder `/conf/automation/js/node_modules/lights` and copy `index.js` to
+this folder.
+
+## Usage
 
     let utils = require("utils");
     utils.myfunction(...);
 
-Example:
+## Example
 
     rules.JSRule({
         name: "telegram-motion-detected",
