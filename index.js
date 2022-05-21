@@ -78,8 +78,9 @@ exports.time_of_day_string_comp = function(time_string1, time_string2) {
  */
 exports.time_of_day_is_in_period = function(period, date) {
 
+    let d = new Date();
     if (period === undefined) return false;
-    if (date === undefined) { var date = new Date(); }
+    if (date !== undefined) d = date;
 
     const ps = period.split("-");
     if (ps.length != 2) { return false; }
@@ -94,8 +95,8 @@ exports.time_of_day_is_in_period = function(period, date) {
     const t1_hours = parseInt(t1[0]);
     const t1_mins = parseInt(t1[1]);
 
-    return ((date.getHours() > t0_hours) || ((date.getHours() === t0_hours) && (date.getMinutes() >= t0_mins))) && //after/equal t0 ? and ...
-            ((date.getHours() < t1_hours) || (date.getHours() === t1_hours) && (date.getMinutes() <= t1_mins));  //before/equal t1
+    return ((d.getHours() > t0_hours) || ((d.getHours() === t0_hours) && (d.getMinutes() >= t0_mins))) && //after/equal t0 ? and ...
+            ((d.getHours() < t1_hours) || (d.getHours() === t1_hours) && (d.getMinutes() <= t1_mins));  //before/equal t1
 
 }
 
