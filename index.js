@@ -21,6 +21,18 @@ exports.log_format_date = function(date) {
 }
 
 /**
+ * Checks if a date object references a timepoint today
+ * @param {Object} date - Date object
+ * @returns {boolean}
+ */
+exports.is_today = function(date) {
+
+    const today = new Date();
+    return someDate.getDate() == today.getDate() && someDate.getMonth() == today.getMonth() && someDate.getFullYear() == today.getFullYear();
+
+}
+
+/**
  * Checks if a date object references a timepoint tomorrow
  * @param {Object} date - Date object
  * @returns {boolean}
@@ -30,7 +42,7 @@ exports.is_tomorrow = function(date) {
     const today = new Date();
     const tomorrow = new Date(today);
     tomorrow.setDate(tomorrow.getDate() + 1);
-    return (date.getYear() == tomorrow.getYear() && date.getMonth() == tomorrow.getMonth() && date.getDate() == tomorrow.getDate());
+    return (date.getFullYear() == tomorrow.getFullYear() && date.getMonth() == tomorrow.getMonth() && date.getDate() == tomorrow.getDate());
 
 }
 
