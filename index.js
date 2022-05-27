@@ -10,7 +10,7 @@
  * @param {Object} date - (optional) Date object. If not defined a new date object is being created (with current date/time).
  * @returns {string} - String with the form "[yyyy-mm-dd hh:mm:ss]" using the 24-hour time notation
  */
-exports.log_format_date = function(date) {
+exports.log_format_datetime = function(date) {
 
     if (date === undefined) date = new Date();
 
@@ -21,14 +21,41 @@ exports.log_format_date = function(date) {
 }
 
 /**
+ * Creates a human friendly string from a date object (German)
+ * @param {Object} date - (optional) Date object. If not defined a new date object is being created (with current date/time).
+ * @returns {string} - String
+ */
+exports.human_friendly_format_date = function(date) {
+
+    if (date === undefined) date = new Date();
+
+    const arrayOfWeekdays = ["So.", "Mo.", "Di.", "Mi.", "Do.", "Fr.", "Sa."];
+
+    if (is_today(date)) {
+        return "Heute (" + date.getDate() + "." + (date.getMonth() + 1) + "." + date.getFullYear() + ")";
+    } else if (is_tomorrow(date)) {
+        return "Morgen (" + arrayOfWeekdays[date.getDay()] + ", " + date.getDate() + "." + (date.getMonth() + 1) + "." + date.getFullYear() + ")";
+    } else if (is_within_next_six_days(date)) {
+        return "Nächsten " + arrayOfWeekdays[date.getDay()] + " (" + date.getDate() + "." + (date.getMonth() + 1) + "." + date.getFullYear() + ")";
+    } else if (is_next_week(date)) {
+        return "Nächste Woche " + arrayOfWeekdays[date.getDay()] + " (" + date.getDate() + "." + (date.getMonth() + 1) + "." + date.getFullYear() + ")";
+    } else {
+        return arrayOfWeekdays[date.getDay()] + ", der " + date.getDate() + "." + (date.getMonth() + 1) + "." + date.getFullYear();
+    }
+
+}
+
+/**
  * Checks if a date object references a timepoint today
  * @param {Object} date - Date object
  * @returns {boolean}
  */
 exports.is_today = function(date) {
 
+    if (date === undefined) date = new Date();
+
     const today = new Date();
-    return someDate.getDate() == today.getDate() && someDate.getMonth() == today.getMonth() && someDate.getFullYear() == today.getFullYear();
+    return date.getDate() == today.getDate() && date.getMonth() == today.getMonth() && date.getFullYear() == today.getFullYear();
 
 }
 
@@ -39,10 +66,53 @@ exports.is_today = function(date) {
  */
 exports.is_tomorrow = function(date) {
 
+    if (date === undefined) date = new Date();
+
     const today = new Date();
     const tomorrow = new Date(today);
     tomorrow.setDate(tomorrow.getDate() + 1);
     return (date.getFullYear() == tomorrow.getFullYear() && date.getMonth() == tomorrow.getMonth() && date.getDate() == tomorrow.getDate());
+
+}
+
+/**
+ * Checks if a date object references a timepoint with the next 6 days
+ * @returns {boolean}
+ */
+exports.is_within_next_six_days = function(date) {
+
+    if (date === undefined) date = new Date();
+    date.setHours(0, 0, 0, 0);
+
+    const today = new Date();
+
+    let nextPoint = new Date();
+    nextPoint.setDate(today.getDate() + 6);
+    nextPoint.setHours(0, 0, 0, 0);
+
+    return (date <= nextPoint);
+
+}
+
+/**
+ * Checks if a date object references a timepoint next week (week starts on monday)
+ * @returns {boolean}
+ */
+exports.is_next_week = function(date) {
+
+    if (date === undefined) date = new Date();
+    date.setHours(0, 0, 0, 0);
+
+    const today = new Date();
+
+    let nextMonday = new Date();
+    let nextnextSunday = new Date();
+    nextMonday.setDate(today.getDate() + ((7 - today.getDay() + 1) % 7 || 7));
+    nextMonday.setHours(0, 0, 0, 0);
+    nextnextSunday.setDate(nextMonday.getDate() + 6);
+    nextnextSunday.setHours(0, 0, 0, 0);
+
+    return (nextMonday <= date && date <= nextnextSunday);
 
 }
 
