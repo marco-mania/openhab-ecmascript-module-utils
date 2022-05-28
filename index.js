@@ -31,13 +31,13 @@ exports.human_friendly_format_date = function(date) {
 
     const arrayOfWeekdays = ["So.", "Mo.", "Di.", "Mi.", "Do.", "Fr.", "Sa."];
 
-    if (is_today(date)) {
+    if (module.exports.is_today(date)) {
         return "Heute (" + date.getDate() + "." + (date.getMonth() + 1) + "." + date.getFullYear() + ")";
-    } else if (is_tomorrow(date)) {
+    } else if (module.exports.is_tomorrow(date)) {
         return "Morgen (" + arrayOfWeekdays[date.getDay()] + ", " + date.getDate() + "." + (date.getMonth() + 1) + "." + date.getFullYear() + ")";
-    } else if (is_within_next_six_days(date)) {
+    } else if (module.exports.is_within_next_six_days(date)) {
         return "Nächsten " + arrayOfWeekdays[date.getDay()] + " (" + date.getDate() + "." + (date.getMonth() + 1) + "." + date.getFullYear() + ")";
-    } else if (is_next_week(date)) {
+    } else if (module.exports.is_next_week(date)) {
         return "Nächste Woche " + arrayOfWeekdays[date.getDay()] + " (" + date.getDate() + "." + (date.getMonth() + 1) + "." + date.getFullYear() + ")";
     } else {
         return arrayOfWeekdays[date.getDay()] + ", der " + date.getDate() + "." + (date.getMonth() + 1) + "." + date.getFullYear();
