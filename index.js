@@ -213,7 +213,7 @@ exports.throttle_barrier = function(map_name, name, limit_sec) {
 
     const now_ts = Math.round((new Date()).getTime() / 1000);
 
-    if throttle_map.map.has(name) {
+    if (throttle_map.map.has(name)) {
         let end_ts = throttle_map.map.get(name);
         if (Number.isInteger(end_ts) && now_ts <= end_ts) return false;
     }
