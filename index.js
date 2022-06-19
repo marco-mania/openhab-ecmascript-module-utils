@@ -196,12 +196,12 @@ exports.get_random_int = function(max, min) {
 }
 
 /**
- * Returns false as long a defined countdown timer is running like a time limited barrier. This is useful for throttling message events.
+ * Returns false as long as current time is before a by name defined timestamp (time limited barrier). This is useful for throttling message events.
  * The barrier map will be placed in the openHAB cache.
  * @param {string} map_name - Map name on which the barrier will be set. Think of it as a folder.
  * @param {string} name - Name of the barrier.
  * @param {number} limit - In seconds how long the barrier should be active.
- * @returns {boolean} - true if no specified countdown timer is running. Otherwise false.
+ * @returns {boolean} - true if now is before the by name defined timestamp (time limited barrier). Otherwise false.
  */
 exports.throttle_barrier = function(map_name, name, limit_sec) {
 
@@ -211,17 +211,17 @@ exports.throttle_barrier = function(map_name, name, limit_sec) {
         cache.put(map_name, throttle_map);
     }
 
-    if (throttle_map.map.has(name) && throttle_map.map.get(name)) return false;
+    const now_ts = Math.round((new Date()).getTime() / 1000);
 
-    throttle_map.map.set(name, true);
+    if throttle_map.map.has(name) {
+        let end_ts = throttle_map.map.get(name);
+        if (Number.isInteger(end_ts) && now_ts <= end_ts) return false;
+    }
+
+    const throttle_end_ts = now_ts + limit_sec;
+
+    throttle_map.map.set(name, throttle_end_ts);
     cache.put(map_name, throttle_map);
-    setTimeout(function() {
-        let throttle_map = cache.get(map_name);
-        if (throttle_map != null) {
-            throttle_map.map.set(name, false);
-            cache.put(map_name, throttle_map);
-        }
-    }, limit_sec*1000);
 
     return true;
 
@@ -236,7 +236,7 @@ exports.throttle_barrier_cancel = function(map_name, name) {
 
     let throttle_map = cache.get(map_name);
     if (throttle_map != null) {
-        throttle_map.map.set(name, false);
+        throttle_map.map.delete(name);
         cache.put(map_name, throttle_map);
     }
 
